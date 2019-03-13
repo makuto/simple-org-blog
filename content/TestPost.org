@@ -1,0 +1,6 @@
+* Test post
+This is a test post.
+
+This is an update.
+
+Here's another update
