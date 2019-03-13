@@ -18,9 +18,8 @@ import ContentConverter
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write('''<html><head><link rel="stylesheet" type="text/css" href="webResources/styles.css"></head>
-                            <body><p>{}</p></body>
-                      </html>'''.format("Hello, world!"))
+        allPosts = ContentConverter.getAllPostsList()
+        self.render("templates/Home.html", allPosts=allPosts)
 
 class BlogHandler(tornado.web.RequestHandler):
     def get(self, request):

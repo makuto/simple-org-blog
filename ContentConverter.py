@@ -61,6 +61,7 @@ renderedDictionary = {}
 
 def updateRenderedCache():
     global renderedCache
+    global renderedDictionary
     renderedCache = []
     # Get all rendered files
     for root, dirs, files in os.walk(renderedDirectory):
@@ -73,6 +74,17 @@ def updateRenderedCache():
                 print("\t'{}' = '{}'".format(contentPath, renderedFile))
                 # No use for the value yet, we just want fast key lookups
                 renderedDictionary[contentPath] = renderedFile
+
+"""
+Interface
+"""
+
+def getAllPostsList():
+    allPosts = []
+    for key, value in renderedDictionary.items():
+        allPosts.append(key)
+
+    return allPosts
                 
 def getRenderedBody(contentPath):
     body = None
