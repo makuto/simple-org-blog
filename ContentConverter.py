@@ -2,7 +2,7 @@ import os
 import subprocess
 
 contentDirectory = "content"
-renderedDirectory = "webResources"
+renderedDirectory = "renderedContent"
 
 # Pairs of extension, pandoc read type
 convertableContentTypes = [(".org", "org")]

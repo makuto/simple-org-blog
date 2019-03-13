@@ -1,2 +1,44 @@
-# simple-org-blog
-A simple web server for blogging with org-mode
+* Simple Org Blog
+
+This project is meant to be a quick-and-dirty blog based on org-mode formatted documents.
+
+** Setup
+
+This project requires Python 3.
+
+*** 1. Install ~tornado~
+
+#+BEGIN_SRC sh
+  pip3 install tornado
+#+END_SRC
+
+*** 2. Install pandoc
+[[https://pandoc.org/installing.html][How to install Pandoc]]. 
+
+For Ubuntu:
+#+BEGIN_SRC sh
+  sudo apt install pandoc
+#+END_SRC
+
+This will be used to convert ~.org~ files into ~.html~.
+*** 3. Generate SSL keys
+
+#+BEGIN_SRC sh
+  openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout certificates/server_jupyter_based.crt.key -out certificates/server_jupyter_based.crt.pem
+#+END_SRC
+
+*** 4. Run the server
+
+#+BEGIN_SRC sh
+python3 simple-org-blog.py 
+#+END_SRC
+
+*** 5. Trust the certificate
+
+Open your browser and visit ~localhost:8888~. 
+
+Your web browser should complain that the website's owner cannot be verified. This is a security measure for SSL related to the certificate. Because we made the certificate ourselves, the browser doesn't know whether to trust the certificate, because there is no signing authority. 
+
+You can safely click ~Advanced~ and add the certificate as trustworthy, because you've signed the certificate and trust yourself :).
+
+If you want to get rid of this, you'll need to get a signing authority like ~LetsEncrypt~ to generate your certificate.
