@@ -4,8 +4,10 @@
 	  <link rel="stylesheet" type="text/css" href="/webResources/styles.css">
    </head>
    <body>
+	 <h1>Simple Blog</h1>
+	 <p>The owner hasn't set up their templates/Home.html template yet.</p>
 	 {% for post in allPosts %}
-		<a href="blog/{{post}}">{{post}}</a>
+		<a href="blog/{{post}}">{{post}}</a><br />
 	 {% end %}
    </body>
  </html>

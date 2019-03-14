@@ -5,7 +5,8 @@ contentDirectory = "content"
 renderedDirectory = "renderedContent"
 
 # Pairs of extension, pandoc read type
-convertableContentTypes = [(".org", "org")]
+# HTML->HTML is essentially a copy, with some pandoc sugar added (see pandoc docs)
+convertableContentTypes = [(".org", "org"), (".html", "html")]
 contentExtensions = []
 for contentType in convertableContentTypes:
     contentExtensions.append(contentType[0])
@@ -45,6 +46,10 @@ def renderContent(contentFilename):
     print("\tRendering {}".format(contentFilename))
     
     outputFilename = contentFilenameToRenderedFilename(contentFilename)
+
+    # Make subdirectory if necessary
+    if not os.path.exists(os.path.dirname(outputFilename)):
+            os.makedirs(os.path.dirname(outputFilename))
     
     # TODO: Support multiple output formats?
     subprocess.run(["pandoc",
