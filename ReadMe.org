@@ -2,6 +2,8 @@
 
 This project is meant to be a quick-and-dirty blog based on org-mode formatted documents.
 
+You can put your ~.org~ files in ~content/~ and it will be rendered into ~renderedContent~ within fifteen minutes, or immediately after starting the server.
+
 ** Setup
 
 This project requires Python 3.
@@ -35,7 +37,7 @@ python3 simple-org-blog.py
 
 *** 5. Trust the certificate
 
-Open your browser and visit ~localhost:8888~. 
+Open your browser and visit ~https://localhost:8888~. 
 
 Your web browser should complain that the website's owner cannot be verified. This is a security measure for SSL related to the certificate. Because we made the certificate ourselves, the browser doesn't know whether to trust the certificate, because there is no signing authority. 
 
