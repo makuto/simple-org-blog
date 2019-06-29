@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import tornado.ioloop
 import tornado.web
@@ -100,3 +100,7 @@ if __name__ == '__main__':
     checkForContentChangeCallback.start()
     
     ioLoop.start()
+
+# Local Variables:
+# compile-command: "./SimpleBlogServer.py"
+# End:

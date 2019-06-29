@@ -109,6 +109,10 @@ def checkForContentChange():
     # Get all content files
     contentCache = []
     for root, dirs, files in os.walk(contentDirectory):
+        # I'm going to use git to version content, so ignore the .git dir
+        if '.git' in root:
+            continue
+
         for file in files:
             if file.endswith(contentExtensions):
                 contentCache.append(os.path.join(root, file))

@@ -2,7 +2,7 @@ body {
     margin: 0 auto;
 	width: 80%;
     height: 100%;
-    background-color: #333333;
+    background-color: #005555;
 	max-width: 800px;
 }
 
@@ -26,4 +26,9 @@ li {
 	margin-left: 20px;
 	font-size: small;
 	color: #aaaaaa;
+}
+
+img {
+	width: 100%;
+	height: auto;
 }
