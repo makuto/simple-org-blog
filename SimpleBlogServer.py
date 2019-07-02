@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
+import tornado.gen
+import tornado.httpclient
+import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-import tornado.httpclient
-import tornado.httpserver
-import tornado.gen
 
 import os
 from datetime import datetime
+import random
+import re
 
 import ContentConverter
 
@@ -16,25 +18,39 @@ import ContentConverter
 # Tornado handlers
 #
 
+def getTitleFromBody(htmlBody):
+    # The cardinal sin: do not use regex to parse HTML! :D
+    match = re.match(r'<h1.*>(.*)</h1>', htmlBody)
+    return match[1]
+
+def getBlogHtmlBody(requestedContent):
+    renderedBody = ContentConverter.getRenderedBody(requestedContent)
+    if not renderedBody:
+        renderedBody = "<p>The post under '{}' does not exist.</p>".format(requestedContent)
+    return renderedBody
+
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         allPosts = ContentConverter.getAllPostsList()
-        self.render("templates/Home.html", allPosts=allPosts)
+        renderedHomeBody = getBlogHtmlBody('Home_hidden')
+        self.render("templates/Home.html", allPosts=allPosts, homeBody=renderedHomeBody)
 
 class BlogHandler(tornado.web.RequestHandler):
     def get(self, request):
-        contentTitle = "Blog: " + request
-        renderedBody = ContentConverter.getRenderedBody(request)
-        if not renderedBody:
-            renderedBody = "<p>The post under '{}' does not exist.</p>".format(request)
+        renderedBody = getBlogHtmlBody(request)
             
-        self.render("templates/BlogPost.html", title=contentTitle, postBody=renderedBody)
+        self.render("templates/BlogPost.html",
+                    title=getTitleFromBody(renderedBody), postBody=renderedBody)
     
 #
 # Startup
 #
 
 def make_app():
+    # Makes sure we don't have predictable cookies to combat spoofed requests
+    randomGenerator = random.SystemRandom()
+    cookieSecret = str(randomGenerator.getrandbits(128))
+    
     return tornado.web.Application([
         # Home page
         (r'/', HomeHandler),
@@ -51,11 +67,10 @@ def make_app():
         # (r'/output/(.*)', tornado.web.StaticFileHandler, {'path' : 'output'}),
 
         # Static files. Keep this at the bottom because it handles everything else
-        # TODO put these in a subdir so everything isn't accessible
         (r'/webResources/(.*)', tornado.web.StaticFileHandler, {'path' : 'webResources'}),
     ],
                                    xsrf_cookies=True,
-                                   cookie_secret='this is my org blog')
+                                   cookie_secret=cookieSecret)
 
 if __name__ == '__main__':
 

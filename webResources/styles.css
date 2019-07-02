@@ -1,31 +1,40 @@
-body {
-    margin: 0 auto;
-	width: 80%;
-    height: 100%;
+html {
+	margin: 15 15 15 15;
     background-color: #333333;
-	max-width: 800px;
+}
+
+body {
+	/* Center body */
+    margin: 0 auto;
+	/* Make sure lines don't get too long */
+	max-width: 700px;
 }
 
 p,
+blockquote,
 h1,
 h2,
 h3,
 a,
-li {
+li,
+tr,
+td,
+th {
     color: #cccccc;
+	font-family: Arial;
+}
+
+/* Font sizes for consistently sized text */
+p,
+blockquote,
+a,
+li {
+    font-size: medium;
 }
 
 label {
 	font-size: large;
 	color: #cccccc;
-}
-
-li {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	margin-left: 20px;
-	font-size: small;
-	color: #aaaaaa;
 }
 
 img {

@@ -87,6 +87,10 @@ Interface
 def getAllPostsList():
     allPosts = []
     for key, value in renderedDictionary.items():
+        # Hide folders and files with '_hidden' (they can still be retrieved though)
+        if '_hidden' in key:
+            continue
+        
         allPosts.append(key)
 
     return allPosts
