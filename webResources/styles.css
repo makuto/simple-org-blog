@@ -1,6 +1,6 @@
 html {
 	margin: 15 15 15 15;
-    background-color: #333333;
+    background-color: #1c2023;
 }
 
 body {
@@ -20,8 +20,36 @@ li,
 tr,
 td,
 th {
-    color: #cccccc;
+    color: #c7ae95;
 	font-family: Arial;
+}
+
+ /* unvisited link */
+a:link {
+	/* color: red; */
+}
+
+/* visited link */
+a:visited {
+  color: #c7c795;
+}
+
+/* mouse over link */
+a:hover {
+  color: #aec795;
+}
+
+/* selected link */
+a:active {
+  color: #95c7ae;
+} 
+
+p,
+blockquote,
+li,
+tr,
+td {
+    color: #95aec7;
 }
 
 /* Font sizes for consistently sized text */
@@ -34,7 +62,7 @@ li {
 
 label {
 	font-size: large;
-	color: #cccccc;
+	color: #f07f43;
 }
 
 img {
