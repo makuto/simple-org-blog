@@ -1,18 +1,18 @@
+<!doctype html>
 <html>
-   <head>
-	  <title>Home</title>
-	  <!-- For mobile -->
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  
-	  <link rel="stylesheet" type="text/css" href="/webResources/styles.css">
-   </head>
-   <body>
-	 {% raw homeBody %}
+	<head>
+		<meta charset="utf-8">
+		<title>Home</title>
+		<!-- For mobile -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" type="text/css" href="/webResources/styles.css">
+	</head>
+	<body>
+		{% raw homeBody %}
 
-	 <nav>
-	   {% for post in allPosts %}
-	   <a href="blog/{{post}}">{{post}}</a><br />
-	   {% end %}
-	 </nav>
-   </body>
- </html>
+			<nav>
+				{% raw contentList %}
+			</nav>
+	</body>
+</html>

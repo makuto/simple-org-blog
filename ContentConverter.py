@@ -1,3 +1,5 @@
+import datetime
+import orgparse
 import os
 import subprocess
 
@@ -62,11 +64,41 @@ contentCache = []
 
 renderedCache = []
 
-renderedDictionary = {}
+renderedContentDictionary = {}
+
+class RenderedContentMetadata:
+    def __init__(self, contentFile, contentPath, renderedFilePath):
+        self.contentFile = contentFile
+        self.contentPath = contentPath
+        self.renderedFilePath = renderedFilePath
+
+        # Properties inherited from the org properties. Code-queried properties added by default
+        self.properties = {}
+        # Set a default date far in the past which is obviously wrong (so you'll fix your data)
+        self.properties["PUBLISHED"] = datetime.datetime(2000, 1, 1)
+        self.properties["TITLE"] = None
+        
+def metadataGetOrgProperties(metadata):
+    if not os.path.exists(metadata.contentFile):
+        print('ERROR: Could not find associated org file "{}" for content file "{}"\n'
+              '\tThe file will be missing necessary metadata'.format(metadata.contentFile,
+                                                                     metadata.renderedFilePath))
+        return
+
+    orgRoot = orgparse.load(metadata.contentFile)
+    for node in orgRoot[1:]:
+        for property, value in node.properties.items():
+            if property == "PUBLISHED":
+                metadata.properties[property] = datetime.datetime.strptime(value, '%Y-%m-%d')
+            else:
+                metadata.properties[property] = value
+        # Set TITLE as the first node if it's not a property
+        if not metadata.properties["TITLE"]:
+            metadata.properties["TITLE"] = node.heading
 
 def updateRenderedCache():
     global renderedCache
-    global renderedDictionary
+    global renderedContentDictionary
     renderedCache = []
     # Get all rendered files
     for root, dirs, files in os.walk(renderedDirectory):
@@ -76,9 +108,15 @@ def updateRenderedCache():
                 renderedCache.append(renderedFile)
                 # The path actually used to look up the content (strip '/' from front)
                 contentPath = getRenderedLocalName(stripExtension(renderedFile))[1:]
+                
                 print("\t'{}' = '{}'".format(contentPath, renderedFile))
-                # No use for the value yet, we just want fast key lookups
-                renderedDictionary[contentPath] = renderedFile
+                
+                # This sucks
+                contentFile = "{}/{}.{}".format(contentDirectory, contentPath, "org")
+                metadata = RenderedContentMetadata(contentFile, contentPath, renderedFile)
+                metadataGetOrgProperties(metadata)
+                
+                renderedContentDictionary[contentPath] = metadata
 
 """
 Interface
@@ -86,7 +124,7 @@ Interface
 
 def getAllPostsList():
     allPosts = []
-    for key, value in renderedDictionary.items():
+    for key, value in renderedContentDictionary.items():
         # Hide folders and files with '_hidden' (they can still be retrieved though)
         if '_hidden' in key:
             continue
@@ -94,11 +132,14 @@ def getAllPostsList():
         allPosts.append(key)
 
     return allPosts
+
+def getRenderedContentDictionary():
+    return renderedContentDictionary
                 
 def getRenderedBody(contentPath):
     body = None
-    if contentPath in renderedDictionary:
-        renderedFilename = renderedDictionary[contentPath]
+    if contentPath in renderedContentDictionary:
+        renderedFilename = renderedContentDictionary[contentPath].renderedFilePath
         renderedFile = open(renderedFilename)
         body = renderedFile.readlines()
         body = "".join(body)

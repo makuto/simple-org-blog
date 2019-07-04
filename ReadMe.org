@@ -5,13 +5,15 @@ This project is meant to be a quick-and-dirty blog based on org-mode formatted d
 You can put your ~.org~ files in ~content/~ and it will be rendered into ~renderedContent~ within fifteen minutes, or immediately after starting the server.
 
 ** Setup
+<<Setup>>
 
 This project requires Python 3.
 
-*** 1. Install ~tornado~
+*** 1. Install Python dependencies
+The server is powered by ~tornado~. I use ~orgparse~ to parse org document properties. ~pandoc~ is used for converting org files into html files.
 
 #+BEGIN_SRC sh
-  pip3 install tornado
+  pip3 install tornado orgparse
 #+END_SRC
 
 *** 2. Install pandoc
@@ -29,12 +31,19 @@ This will be used to convert ~.org~ files into ~.html~.
   openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout certificates/server_jupyter_based.crt.key -out certificates/server_jupyter_based.crt.pem
 #+END_SRC
 
+If you have a domain name, you should use [[https://certbot.eff.org/][Certbot]] to generate your certificates. These won't pop the security warning like the self-signing ones will.
+
 *** 4. Run the server
 
 #+BEGIN_SRC sh
-python3 simple-org-blog.py 
+python3 SimpleBlogServer.py 
 #+END_SRC
 
+If you want to redirect all HTTP visits to the blog server (which is HTTPS only), also run the redirect server:
+
+#+BEGIN_SRC sh
+python3 RedirectToHttpsServer.py 
+#+END_SRC
 *** 5. Trust the certificate
 
 Open your browser and visit ~https://localhost:8888~. 
@@ -44,3 +53,14 @@ Your web browser should complain that the website's owner cannot be verified. Th
 You can safely click ~Advanced~ and add the certificate as trustworthy, because you've signed the certificate and trust yourself :).
 
 If you want to get rid of this, you'll need to get a signing authority like ~LetsEncrypt~ to generate your certificate.
+** Deploying on the internet
+I used [[https://lightsail.aws.amazon.com][Amazon AWS Lightsail]] to host this server for [[https://macoy.me][my personal blog]]:
+
+1. Create an Ubuntu machine. I used the lowest spec ($3.50/month option) because I don't expect much traffic
+2. Open up port ~80~ and ~443~ in the Lightsail *Network* configuration page
+3. Use the Amazon SSH stuff to start setting up the machine
+4. ~sudo apt update && sudo apt upgrade~ is necessary to install Python and such
+5. Use [[https://certbot.eff.org/][Certbot]] to generate certificates
+6. Modify [[file:SimpleBlogServer.py::80][SimpleBlogServer port]] to be port 443 (HTTPS default)
+7. Follow the [[Setup]] section normally
+8. Use [[https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html][SCP]] to copy content from local machine into Amazon ~content/~

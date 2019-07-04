@@ -32,8 +32,35 @@ def getBlogHtmlBody(requestedContent):
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         allPosts = ContentConverter.getAllPostsList()
+
+        # Build content list
+        contentListHtml = ''
+        renderedContentDictionary = ContentConverter.getRenderedContentDictionary()
+        metadataList = []
+        for contentPath, metadata in renderedContentDictionary.items():
+            metadataList.append(metadata)
+        # Sort by newest to oldest
+        metadataList.sort(key = lambda metadata: metadata.properties["PUBLISHED"], reverse = True)
+        for metadata in metadataList:
+            if "_hidden" in metadata.contentPath:
+                continue
+
+            # Turn folders into tags
+            tags = metadata.contentPath.split('/')[:-1]
+            tagsHtml = ''
+            for tag in tags:
+                tagsHtml += '<label>{}</label>'.format(tag)
+            
+            contentListHtml += ('<div class="blogPostLinkContainer"><a class="blogPostLink" href="blog/{contentPath}">{title}</a><time class="publishedDate">— {published}</time>{tagsHtml}</div>\n'
+                                .format(contentPath = metadata.contentPath,
+                                        title = metadata.properties["TITLE"],
+                                        published = metadata.properties["PUBLISHED"].strftime("%B %d, %Y"),
+                                        tagsHtml = tagsHtml))
+
+        # Home is also just a rendered content file, just with a special name
         renderedHomeBody = getBlogHtmlBody('Home_hidden')
-        self.render("templates/Home.html", allPosts=allPosts, homeBody=renderedHomeBody)
+        
+        self.render("templates/Home.html", allPosts=allPosts, homeBody=renderedHomeBody, contentList=contentListHtml)
 
 class BlogHandler(tornado.web.RequestHandler):
     def get(self, request):

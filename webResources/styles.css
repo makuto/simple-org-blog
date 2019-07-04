@@ -19,29 +19,42 @@ a,
 li,
 tr,
 td,
-th {
+th,
+time {
     color: #c7ae95;
 	font-family: Arial;
+}
+
+.blogPostLinkContainer {
+	margin-bottom: 7px;
+}
+
+.blogPostLink {
+	font-size: larger;
 }
 
  /* unvisited link */
 a:link {
 	/* color: red; */
+	text-decoration: none;
 }
 
 /* visited link */
 a:visited {
-  color: #c7c795;
+	color: #c7c795;
+	text-decoration: none;
 }
 
 /* mouse over link */
 a:hover {
-  color: #aec795;
+	color: #aec795;
+	text-decoration: underline;
 }
 
 /* selected link */
 a:active {
-  color: #95c7ae;
+	color: #95c7ae;
+	text-decoration: underline;
 } 
 
 p,
@@ -50,6 +63,17 @@ li,
 tr,
 td {
     color: #95aec7;
+}
+
+time {
+	color: #95aec7;
+	/* color: #c7ae9; */
+	font-style: italic;
+	font-size: smaller;
+}
+
+.publishedDate {
+	margin-left: 20px;
 }
 
 /* Font sizes for consistently sized text */
@@ -61,8 +85,11 @@ li {
 }
 
 label {
-	font-size: large;
-	color: #f07f43;
+	/* font-size: large; */
+	/* color: #f07f43; */
+    color: #c79595;
+	margin-left: 10px;
+	font-style: italic;
 }
 
 img {
