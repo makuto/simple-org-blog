@@ -51,10 +51,11 @@ class HomeHandler(tornado.web.RequestHandler):
             for tag in tags:
                 tagsHtml += '<label>{}</label>'.format(tag)
             
+            # Use non-breaking spaces on dates for better wrapping
             contentListHtml += ('<div class="blogPostLinkContainer"><a class="blogPostLink" href="blog/{contentPath}">{title}</a><time class="publishedDate">— {published}</time>{tagsHtml}</div>\n'
                                 .format(contentPath = metadata.contentPath,
                                         title = metadata.properties["TITLE"],
-                                        published = metadata.properties["PUBLISHED"].strftime("%B %d, %Y"),
+                                        published = metadata.properties["PUBLISHED"].strftime("%B&nbsp;%d,&nbsp;%Y"),
                                         tagsHtml = tagsHtml))
 
         # Home is also just a rendered content file, just with a special name

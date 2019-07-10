@@ -57,6 +57,7 @@ a:active {
 	text-decoration: underline;
 } 
 
+/* Regular body text */
 p,
 blockquote,
 li,
@@ -66,8 +67,8 @@ td {
 }
 
 time {
-	color: #95aec7;
-	/* color: #c7ae9; */
+	/* color: #95aec7; */
+	color: #7c91a5;
 	font-style: italic;
 	font-size: smaller;
 }
@@ -86,8 +87,8 @@ li {
 
 label {
 	/* font-size: large; */
-	/* color: #f07f43; */
-    color: #c79595;
+	color: #9c7575;
+    /* color: #c79595; */
 	margin-left: 10px;
 	font-style: italic;
 }
@@ -95,4 +96,9 @@ label {
 img {
 	width: 100%;
 	height: auto;
+}
+
+::selection {
+    background-color: #c7ae95;
+    color: #000000;
 }
