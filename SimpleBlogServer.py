@@ -18,16 +18,14 @@ import ContentConverter
 # Tornado handlers
 #
 
-def getTitleFromBody(htmlBody):
-    # The cardinal sin: do not use regex to parse HTML! :D
-    match = re.match(r'<h1.*>(.*)</h1>', htmlBody)
-    return match[1]
-
 def getBlogHtmlBody(requestedContent):
     renderedBody = ContentConverter.getRenderedBody(requestedContent)
     if not renderedBody:
         renderedBody = "<p>The post under '{}' does not exist.</p>".format(requestedContent)
     return renderedBody
+
+def getPrettyHtmlTime(time):
+    return time.strftime("%B&nbsp;%d,&nbsp;%Y")
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
@@ -55,7 +53,7 @@ class HomeHandler(tornado.web.RequestHandler):
             contentListHtml += ('<div class="blogPostLinkContainer"><a class="blogPostLink" href="blog/{contentPath}">{title}</a><time class="publishedDate">— {published}</time>{tagsHtml}</div>\n'
                                 .format(contentPath = metadata.contentPath,
                                         title = metadata.properties["TITLE"],
-                                        published = metadata.properties["PUBLISHED"].strftime("%B&nbsp;%d,&nbsp;%Y"),
+                                        published = getPrettyHtmlTime(metadata.properties["PUBLISHED"]),
                                         tagsHtml = tagsHtml))
 
         # Home is also just a rendered content file, just with a special name
@@ -66,9 +64,12 @@ class HomeHandler(tornado.web.RequestHandler):
 class BlogHandler(tornado.web.RequestHandler):
     def get(self, request):
         renderedBody = getBlogHtmlBody(request)
+        metadata = ContentConverter.getRenderedContentDictionary()[request]
             
         self.render("templates/BlogPost.html",
-                    title=getTitleFromBody(renderedBody), postBody=renderedBody)
+                    title=metadata.properties["TITLE"],
+                    postBody=renderedBody,
+                    published=getPrettyHtmlTime(metadata.properties["PUBLISHED"]))
     
 #
 # Startup

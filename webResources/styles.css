@@ -6,6 +6,7 @@ html {
 body {
 	/* Center body */
     margin: 0 auto;
+	padding: 30px;
 	/* Make sure lines don't get too long */
 	max-width: 700px;
 }
@@ -23,6 +24,16 @@ th,
 time {
     color: #c7ae95;
 	font-family: Arial;
+	line-height: 1.65;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 20px 0;
+}
+
+th {
+	text-align: left;
 }
 
 .blogPostLinkContainer {
@@ -66,14 +77,15 @@ td {
     color: #95aec7;
 }
 
-time {
+time,
+.timeLabel {
 	/* color: #95aec7; */
 	color: #7c91a5;
 	font-style: italic;
-	font-size: smaller;
 }
 
 .publishedDate {
+	font-size: smaller;
 	margin-left: 20px;
 }
 
